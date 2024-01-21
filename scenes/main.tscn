@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://bmnq1y0uben5h"]
+
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_3uy3p"]
+[ext_resource type="Texture2D" uid="uid://bg2t82hcxbpgh" path="res://assets/space_background.png" id="1_776mc"]
+[ext_resource type="PackedScene" uid="uid://b4l7m5v272nob" path="res://scenes/PlayerScene/player.tscn" id="2_si8dw"]
+[ext_resource type="PackedScene" uid="uid://d34i6314t2fbf" path="res://scenes/Rock/rock.tscn" id="2_vspn5"]
+[ext_resource type="PackedScene" uid="uid://hsw4eu24mbcv" path="res://scenes/Enemies/enemy.tscn" id="3_njid5"]
+[ext_resource type="PackedScene" uid="uid://cncvwevkt67qj" path="res://scenes/HUD/hud.tscn" id="5_xbrok"]
+
+[sub_resource type="Curve2D" id="Curve2D_l28o8"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1912, 0, 0, 0, 0, 0, 1912, 1080, 0, 0, 0, 0, 0, 1072, 0, 0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[node name="Main" type="Node"]
+process_mode = 3
+script = ExtResource("1_3uy3p")
+rock_scene = ExtResource("2_vspn5")
+enemy_scene = ExtResource("3_njid5")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -36.0
+offset_right = 76.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_776mc")
+
+[node name="Player" parent="." instance=ExtResource("2_si8dw")]
+engine_power = 500
+
+[node name="RockPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_l28o8")
+
+[node name="RockSpawn" type="PathFollow2D" parent="RockPath"]
+
+[node name="HUD" parent="." instance=ExtResource("5_xbrok")]
+
+[node name="EnemyTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="dead" from="Player" to="." method="game_over"]
+[connection signal="lives_changed" from="Player" to="HUD" method="update_lives"]
+[connection signal="shield_changed" from="Player" to="HUD" method="update_shield"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
+[connection signal="timeout" from="EnemyTimer" to="." method="_on_enemy_timer_timeout"]

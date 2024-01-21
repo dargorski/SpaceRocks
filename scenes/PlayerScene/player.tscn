@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3 uid="uid://b4l7m5v272nob"]
+
+[ext_resource type="Script" path="res://scenes/PlayerScene/player.gd" id="1_tvn73"]
+[ext_resource type="Texture2D" uid="uid://ciiu6vxnwxryl" path="res://assets/player_ship.png" id="1_v4k3v"]
+[ext_resource type="PackedScene" uid="uid://d1kped62ym1te" path="res://scenes/BulletScene/bullet.tscn" id="2_kt3cj"]
+[ext_resource type="PackedScene" uid="uid://xswpl5wg75n0" path="res://scenes/Explosion/explosion.tscn" id="4_cc47b"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_trbfb"]
+radius = 31.257
+
+[node name="Player" type="RigidBody2D"]
+max_contacts_reported = 1
+contact_monitor = true
+linear_damp = 1.0
+angular_damp = 5.0
+script = ExtResource("1_tvn73")
+bullet_scene = ExtResource("2_kt3cj")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+rotation = 1.5708
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_v4k3v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_trbfb")
+
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(50, 0)
+
+[node name="GunCooldown" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="Explosion" parent="." instance=ExtResource("4_cc47b")]
+visible = false
+
+[node name="InvulnerabilityTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="GunCooldown" to="." method="_on_gun_cooldown_timeout"]
+[connection signal="timeout" from="InvulnerabilityTimer" to="." method="_on_invulnerability_timer_timeout"]

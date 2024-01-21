@@ -1,0 +1,51 @@
+[gd_scene load_steps=5 format=3 uid="uid://xswpl5wg75n0"]
+
+[ext_resource type="Texture2D" uid="uid://cslwpoa2011l2" path="res://assets/explosion.png" id="1_fh7wo"]
+
+[sub_resource type="Animation" id="Animation_h8k6w"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_qug70"]
+resource_name = "explosion"
+length = 0.64
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 0.6001),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0, 63, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ixbev"]
+_data = {
+"RESET": SubResource("Animation_h8k6w"),
+"explosion": SubResource("Animation_qug70")
+}
+
+[node name="Explosion" type="Sprite2D"]
+texture = ExtResource("1_fh7wo")
+hframes = 8
+vframes = 8
+frame = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ixbev")
+}
