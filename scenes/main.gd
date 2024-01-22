@@ -11,12 +11,16 @@ func _ready():
 	$Player/Sprite2D.hide()
 	
 func _process(delta):
+	
 	if not playing:
 		return
+	if $Music.finished:
+		$Music.play()
 	if get_tree().get_nodes_in_group("rocks").size() == 0:
 		new_level()
 		
 func new_game():
+	$Music.play()
 	get_tree().call_group("rocks", "queue_free")
 	level = 0
 	score = 0
@@ -27,6 +31,7 @@ func new_game():
 	playing = true
 	
 func new_level():
+	$LevelupSound.play()
 	level += 1
 	$HUD.show_message("Wave %s" % level)
 	for i in level:
@@ -47,6 +52,7 @@ func spawn_rock(rock_size: int, pos=null, vel=null):
 	rock.exploded.connect(self._on_rock_exploded)
 	
 func _on_rock_exploded(size,radius,pos, vel):
+	$ExplosionSound.play()
 	if size <= 1:
 		return
 	for offset in [-1,1]:
@@ -56,6 +62,7 @@ func _on_rock_exploded(size,radius,pos, vel):
 		spawn_rock(size - 1,newpos, newvel)
 		
 func game_over():
+	$Music.stop()
 	playing = false
 	$HUD.game_over()
 	
@@ -74,7 +81,6 @@ func _input(event):
 
 
 func _on_enemy_timer_timeout():
-	print('enemy spawn')
 	var enemy = enemy_scene.instantiate()
 	add_child(enemy)
 	enemy.target = $Player

@@ -53,6 +53,8 @@ func get_input():
 		thrust = Vector2.ZERO
 	if Input.is_action_pressed("thrust"):
 		thrust = transform.x * engine_power
+		if not $EngineSound.playing:
+			$EngineSound.play()
 	if Input.is_action_pressed("shoot") and can_shoot:
 		shoot()
 	rotation_dir = Input.get_axis("rotate_left", "rotate_right")
@@ -86,6 +88,7 @@ func change_state(new_state):
 				$CollisionShape2D.set_deferred("disabled", true)
 				$Sprite2D.hide()
 				linear_velocity = Vector2.ZERO
+				$EngineSound.stop()
 				dead.emit()
 		state = new_state
 
@@ -95,6 +98,7 @@ func shoot():
 	can_shoot = false
 	$GunCooldown.start()
 	var bullet = bullet_scene.instantiate()
+	$LaserSound.play()
 	get_tree().root.add_child(bullet)
 	bullet.start($Muzzle.global_transform)
 
