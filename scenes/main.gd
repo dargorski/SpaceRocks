@@ -14,8 +14,7 @@ func _process(delta):
 	
 	if not playing:
 		return
-	if $Music.finished:
-		$Music.play()
+	#if $Music.finished:
 	if get_tree().get_nodes_in_group("rocks").size() == 0:
 		new_level()
 		

@@ -49,9 +49,11 @@ func _process(delta):
 	get_input()
 	
 func get_input():
+	$Exhaust.emitting = false
 	if state in [DEAD, INIT]:
-		thrust = Vector2.ZERO
+		thrust = Vector2.ZERO	
 	if Input.is_action_pressed("thrust"):
+		$Exhaust.emitting = true
 		thrust = transform.x * engine_power
 		if not $EngineSound.playing:
 			$EngineSound.play()
@@ -85,10 +87,10 @@ func change_state(new_state):
 				$Sprite2D.modulate.a = 0.5
 				$InvulnerabilityTimer.start()
 			DEAD:
+				$EngineSound.stop()
 				$CollisionShape2D.set_deferred("disabled", true)
 				$Sprite2D.hide()
-				linear_velocity = Vector2.ZERO
-				$EngineSound.stop()
+				linear_velocity = Vector2.ZERO				
 				dead.emit()
 		state = new_state
 

@@ -25,7 +25,6 @@ func update_lives(value):
 		lives_counter[item].visible = value > item
 
 func update_shield(value):
-	print(value)
 	shield_bar.texture_progress = bar_textures["green"]
 	if value < 0.4:
 		shield_bar.texture_progress = bar_textures["red"]

@@ -39,7 +39,6 @@ func shoot_pulse(n, delay):
 
 func take_damage(amount):
 	health -= amount;
-	print(health)
 	$AnimationPlayer.play("flash")
 	if health <= 0:
 		explode()
